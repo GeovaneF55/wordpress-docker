@@ -5,29 +5,29 @@
 #
 # Note: if you want to stage/commit WP core files
 # you can delete this whole section/until Configuration.
-/wp-admin/
-/wp-content/index.php
-/wp-content/languages
-/wp-content/plugins/index.php
-/wp-content/themes/index.php
-/wp-includes/
-/index.php
-/license.txt
-/readme.html
-/wp-*.php
-/xmlrpc.php
+/wordpress/wp-admin/
+/wordpress/wp-content/index.php
+/wordpress/wp-content/languages
+/wordpress/wp-content/plugins/index.php
+/wordpress/wp-content/themes/index.php
+/wordpress/wp-includes/
+/wordpress/index.php
+/wordpress/license.txt
+/wordpress/readme.html
+/wordpress/wp-*.php
+/wordpress/xmlrpc.php
 
 # Configuration
-wp-config.php
+/wordpress/wp-config.php
 
 # Example themes
-/wp-content/themes/twenty*/
+/wordpress/wp-content/themes/twenty*/
 
 # Example plugin
-/wp-content/plugins/hello.php
+/wordpress/wp-content/plugins/hello.php
 
 # Uploads
-/wp-content/uploads/
+/wordpress/wp-content/uploads/
 
 # Log files
 *.log
@@ -39,13 +39,17 @@ wp-config.php
 #
 # Note: If you wish to whitelist plugins,
 # uncomment the next line
-#/wp-content/plugins
+/wordpress/wp-content/plugins
 
 # All themes
 #
 # Note: If you wish to whitelist themes,
 # uncomment the next line
-#/wp-content/themes
+/wordpress/wp-content/themes
 
-# Environments
+# Environment
 .env
+
+# VS Code
+*.code-workspace
+.vscode/
