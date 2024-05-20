@@ -33,7 +33,7 @@
 *.log
 
 # htaccess
-/.htaccess
+/wordpress/.htaccess
 
 # All plugins
 #
