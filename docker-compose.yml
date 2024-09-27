@@ -23,7 +23,11 @@ services:
   phpmyadmin:
     depends_on:
       - mysql
-    image: phpmyadmin:latest
+    build:
+      context: ./build/phpmyadmin
+      dockerfile: Dockerfile
+    volumes:
+      - ./phpmyadmin/themes:/var/www/html/themes
     restart: always
     ports:
       - "8080:80"
@@ -40,7 +44,7 @@ services:
     depends_on:
       - mysql
     build:
-      context: ./
+      context: ./build/wordpress
       dockerfile: ./Dockerfile
     ports:
       - "8000:80"
