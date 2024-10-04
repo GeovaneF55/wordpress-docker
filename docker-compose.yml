@@ -30,10 +30,12 @@ services:
       - ./phpmyadmin/themes:/var/www/html/themes
     restart: always
     ports:
-      - "8080:80"
+      - 8080:80
     env_file: .env
     environment:
       PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
