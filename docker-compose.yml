@@ -49,7 +49,7 @@ services:
       context: ./build/wordpress
       dockerfile: ./Dockerfile
     ports:
-      - "8000:80"
+      - 8000:80
     restart: always
     volumes:
       - ./wordpress:/var/www/html
