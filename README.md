@@ -7,10 +7,14 @@ Easily set up and managed local WordPress development using Docker, MySQL, and p
 1. [Install Docker](https://docs.docker.com/get-docker/) on your system.
 2. Clone this repository.
 3. Create a `.env` file by copying `.env-sample`:  
-   `cp .env-sample .env`
+```bash
+cp .env-sample .env
+```
 4. Configure the required values in the `.env` file. These values will be used to set up MySQL and initialize the database for your WordPress site.
-5. Run the following command inside the project directory:  
-   `docker-compose up -d`
+5. Run the following command inside the project directory:
+```bash
+docker-compose up -d
+```
 6. Access your WordPress installation by navigating to [http://localhost:8000](http://localhost:8000) in your browser.
 7. Complete the WordPress installation process.
 8. Your website is now ready for development!
@@ -25,10 +29,14 @@ If this is your first time running the setup, Docker will pull the necessary ima
 ## Key Commands
 
 - **Stop Containers:**  
-  `docker-compose down`
+```bash
+docker-compose down
+```
   
 - **Rebuild Containers:**  
-  `docker-compose build`
+```bash
+docker-compose build
+```
 
 For more information on Docker Compose, refer to the official [Docker Compose reference](https://docs.docker.com/compose/reference/).
 
