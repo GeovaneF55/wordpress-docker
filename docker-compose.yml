@@ -1,9 +1,8 @@
+version: '3.8'
 services:
   # Database
   mysql:
     image: mysql:latest
-    volumes:
-      - ./mysql:/var/lib/mysql
     restart: always
     env_file: .env
     environment:
@@ -11,13 +10,16 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
+    volumes:
+      - ./mysql_data:/var/lib/mysql  # Named volume for data persistence
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p", "user_password"]
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 1m
       timeout: 10s
       retries: 3
     networks:
       - wp_network
+
   # PHPMyAdmin
   phpmyadmin:
     depends_on:
@@ -25,8 +27,6 @@ services:
     build:
       context: ./build/phpmyadmin
       dockerfile: Dockerfile
-    volumes:
-      - ./phpmyadmin/themes:/var/www/html/themes
     restart: always
     ports:
       - 8080:80
@@ -36,25 +36,21 @@ services:
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_USER: $MYSQL_USER
-      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    volumes:
+      - ./phpmyadmin/themes:/var/www/html/themes  # Mount themes for customization
     networks:
       - wp_network
+
   # WordPress
   wordpress:
     depends_on:
       - mysql
     build:
       context: ./build/wordpress
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
+    restart: always
     ports:
       - 8000:80
-    restart: always
-    volumes:
-      - ./wordpress:/var/www/html
-      - ./log/:/var/log
-      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-      - ./error-logging.ini:/usr/local/etc/php/conf.d/error-logging.ini
     env_file: .env
     environment:
       WORDPRESS_DB_HOST: mysql:3306
@@ -66,20 +62,24 @@ services:
       WORDPRESS_CONFIG_EXTRA: |
         define('FS_METHOD', 'direct');
         define('SCRIPT_DEBUG', true);
+    volumes:
+      - ./wordpress_data:/var/www/html                # Named volume for WordPress data
+      - ./logs:/var/log                               # Named volume for log files
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./error-logging.ini:/usr/local/etc/php/conf.d/error-logging.ini
     networks:
       - wp_network
-  # WordPress Client
+
+  # WordPress CLI Client
   wpcli:
     depends_on:
       - mysql
       - wordpress
     image: wordpress:cli
-    links:
-      - mysql:mysql
-    volumes_from:
-      - wordpress
     entrypoint: wp
     command: "--info"
+    volumes:
+      - ./wordpress_data:/var/www/html                # Use WordPress volume
     environment:
       WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_NAME: $MYSQL_DATABASE
@@ -91,9 +91,11 @@ services:
         define('FS_METHOD', 'direct');
     networks:
       - wp_network
+
 networks:
   wp_network:
+
 volumes:
-  mysql:
-  wordpress:
-  phpmyadmin:
+  mysql_data:            # Named volume for MySQL data
+  wordpress_data:        # Named volume for WordPress data
+  logs:                  # Named volume for logs
