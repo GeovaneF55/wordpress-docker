@@ -10,7 +10,7 @@ services:
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
     volumes:
-      - ./mysql_data:/var/lib/mysql  # Named volume for data persistence
+      - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 1m
@@ -23,9 +23,7 @@ services:
   phpmyadmin:
     depends_on:
       - mysql
-    build:
-      context: ./build/phpmyadmin
-      dockerfile: Dockerfile
+    image: phpmyadmin/phpmyadmin:latest
     restart: always
     ports:
       - 8080:80
@@ -35,8 +33,6 @@ services:
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-    volumes:
-      - ./phpmyadmin/themes:/var/www/html/themes  # Mount themes for customization
     networks:
       - wp_network
 
